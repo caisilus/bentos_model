@@ -8,7 +8,7 @@ def predict():
     dummy_img = open('dummy.jpg', 'rb')
 
     data = {
-        'predicted class': "Bentos Moluskus",
+        'predicted class': "Dreissena polymorpha",
         'image': base64.b64encode(dummy_img.read()).decode()
     }
 
