@@ -13,7 +13,7 @@ def predict():
 
     image_urls= data['url']
     data = model.predict(image_urls)
-    return data
+    return jsonify(data)
 
 if __name__ == 'main':
     app.run(debug=True)
