@@ -1,18 +1,19 @@
-from flask import Flask
+from flask import Flask, request, jsonify
+from src.model import Detection_model
 import base64
 
 app = Flask(__name__)
+model = Detection_model()
 
 @app.route('/predict')
 def predict():
-    dummy_img = open('dummy.jpg', 'rb')
+    data = request.json
+    if not data or 'url' not in data:
+        return jsonify({'error': 'URL not provided in JSON data'}), 400
 
-    data = {
-        'predicted class': "Dreissena polymorpha",
-        'image': base64.b64encode(dummy_img.read()).decode()
-    }
-
+    image_url = data['url']
+    data = model.predict(image_url)
     return data
 
-# if __name__ == 'main':
-app.run(debug=True)
+if __name__ == 'main':
+    app.run(debug=True)
