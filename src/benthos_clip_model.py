@@ -17,7 +17,7 @@ class BenthosClip():
         self.model, self.preprocess_train, self.preprocess_val = open_clip.create_model_and_transforms(checkpoint)
         self.tokenizer = open_clip.get_tokenizer(checkpoint)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.names = self.tokenizer(list_of_names)
+        self.names = self.tokenizer(list_of_names['names'])
 
     def __call__(self, image: Image): #TODO do batch inference
         image = self.preprocess_val(image).unsqueeze(0).to(self.device)
@@ -29,11 +29,11 @@ class BenthosClip():
             text_probs = (100.0 * image_features @ text_features.T).softmax(dim=-1)
 
         text_probs = text_probs.numpy()
-        max_id = np.argmax(text_probs)
+        max_id = np.argmax(text_probs[0])
         true_name = self.names_decoder[max_id]
         res = {}
-        for i, p in enumerate(text_probs):
+        for i, p in enumerate(text_probs[0]):
             res[self.names_decoder[i]] = p
 
-        full_res = {k: v for k, v in sorted(res.items(), key=lambda item: item[1], reverse=True)}    
+        full_res = {k: v for k, v in sorted(res.items(), key=lambda item: item[1], reverse=True)}   
         return full_res, true_name
