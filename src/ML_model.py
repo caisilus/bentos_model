@@ -15,8 +15,8 @@ class ML_model():
         for image in images:
             detections_data = self.detection_model.detect(image)
             for det in detections_data['detections']:
-                box = det['box']
-                det_img = Image.fromarray(detections_data['image'][box[1]:box[3],box[0]:box[2]], 'RGB')
+                x1, y1, x2, y2 = det['box']
+                det_img = Image.fromarray(detections_data['image'][y1:y2,x1:x2], 'RGB')
                 all_info, true_name = self.clip_model(det_img)
                 print(true_name)
                 det['name'] = true_name
