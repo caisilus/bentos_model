@@ -17,7 +17,7 @@ class Detection_model:
         boxes = detection_results.boxes.data.tolist()
         detections = [{'box': [int(b) for b in box[:4]], 'conf': conf} for box, conf in zip(boxes, confs) if conf > self.thereshhold]
 
-        return {'image': detection_results.orig_img, 'detections': detections}
+        return {'image': cv2.cvtColor(detection_results.orig_img, cv2.COLOR_BGR2RGB), 'detections': detections}
     
     def show_detections(self, detections_data):
         image_np = detections_data['image']

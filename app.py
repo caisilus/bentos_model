@@ -1,9 +1,9 @@
 from flask import Flask, request, jsonify
-from bentos_model.src.detection_model import Detection_model
+from src.ML_model import ML_model
 import base64
 
 app = Flask(__name__)
-model = Detection_model()
+model = ML_model()
 
 @app.route('/predict', methods = ['POST'])
 def predict():
@@ -12,7 +12,7 @@ def predict():
         return jsonify({'error': 'URL not provided in JSON data'}), 400
 
     image_urls= data['url']
-    data = model.predict(image_urls)
+    data = model.handle_images(image_urls)
     return jsonify(data)
 
 if __name__ == 'main':
